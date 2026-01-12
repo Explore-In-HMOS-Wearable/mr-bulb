@@ -13,39 +13,39 @@ interface formData {
 }
 
 class OpenCloseParcelable implements rpc.Parcelable {
-  isOpen: boolean
+  isOpen: boolean;
 
   constructor(isOpen: boolean) {
-    this.isOpen = isOpen
+    this.isOpen = isOpen;
   }
 
   marshalling(messageSequence: rpc.MessageSequence): boolean {
-    messageSequence.writeBoolean(this.isOpen)
+    messageSequence.writeBoolean(this.isOpen);
     return true;
   }
 
   unmarshalling(messageSequence: rpc.MessageSequence): boolean {
-    const dataObj: formData = JSON.parse(messageSequence.readString())
-    this.isOpen = dataObj.isOpen
+    const dataObj: formData = JSON.parse(messageSequence.readString());
+    this.isOpen = dataObj.isOpen;
     return true;
   }
 }
 
 class BrightnessParcelable implements rpc.Parcelable {
-  brightness: number
+  brightness: number;
 
   constructor(brightness: number) {
-    this.brightness = brightness
+    this.brightness = brightness;
   }
 
   marshalling(messageSequence: rpc.MessageSequence): boolean {
-    messageSequence.writeDouble(this.brightness)
+    messageSequence.writeDouble(this.brightness);
     return true;
   }
 
   unmarshalling(messageSequence: rpc.MessageSequence): boolean {
-    const dataObj: formData = JSON.parse(messageSequence.readString())
-    this.brightness = dataObj.brightness
+    const dataObj: formData = JSON.parse(messageSequence.readString());
+    this.brightness = dataObj.brightness;
     return true;
   }
 }
@@ -58,19 +58,19 @@ export default class EntryAbility extends UIAbility {
     // postCardAction 'call' is caught here
     this.callee.on('openClose', (data: rpc.MessageSequence) => {
       // Obtain all parameters passed in the call event.
-      const dataObj: formData = JSON.parse(data.readString())
-      console.log('openClose', JSON.stringify(dataObj), dataObj.isOpen);
+      const dataObj: formData = JSON.parse(data.readString());
+      console.info('openClose', JSON.stringify(dataObj), dataObj.isOpen);
 
-      AppStorage.set('isOpen', dataObj.isOpen)
+      AppStorage.set('isOpen', dataObj.isOpen);
       return new OpenCloseParcelable(dataObj.isOpen);
     });
 
     this.callee.on('setBright', (data: rpc.MessageSequence) => {
       // Obtain all parameters passed in the call event.
-      const dataObj: formData = JSON.parse(data.readString())
-      console.log('setBright', JSON.stringify(dataObj), dataObj.brightness);
+      const dataObj: formData = JSON.parse(data.readString());
+      console.info('setBright', JSON.stringify(dataObj), dataObj.brightness);
 
-      AppStorage.set('brightness', dataObj.brightness)
+      AppStorage.set('brightness', dataObj.brightness);
       return new BrightnessParcelable(dataObj.brightness);
     });
   }
@@ -78,11 +78,10 @@ export default class EntryAbility extends UIAbility {
   onDestroy(): void {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onDestroy');
     this.callee.off('openClose');
-    this.callee.off('setBright')
+    this.callee.off('setBright');
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
-    // Main window is created, set main page for this ability
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
     windowStage.loadContent('pages/Index', (err) => {
@@ -92,22 +91,22 @@ export default class EntryAbility extends UIAbility {
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
 
-      PersistentStorage.persistProp('isOpen', false)
-      PersistentStorage.persistProp('brightness', 100)
-      PersistentStorage.persistProp('r', 255)
-      PersistentStorage.persistProp('g', 255)
-      PersistentStorage.persistProp('b', 255)
-      PersistentStorage.persistProp('formId', '')
-      PersistentStorage.persistProp('morningReminder', false)
-      PersistentStorage.persistProp('nightReminder', false)
-      PersistentStorage.persistProp('morningReminderId', 0)
-      PersistentStorage.persistProp('nightReminderId', 0)
+      PersistentStorage.persistProp('isOpen', false);
+      PersistentStorage.persistProp('brightness', 100);
+      PersistentStorage.persistProp('red', 255);
+      PersistentStorage.persistProp('green', 255);
+      PersistentStorage.persistProp('blue', 255);
+      PersistentStorage.persistProp('formId', '');
+      PersistentStorage.persistProp('morningReminder', false);
+      PersistentStorage.persistProp('nightReminder', false);
+      PersistentStorage.persistProp('morningReminderId', 0);
+      PersistentStorage.persistProp('nightReminderId', 0);
 
-      const pref = new Pref(this.context)
+      const pref = new Pref(this.context);
 
-      AppStorage.set('isOpen', pref.getIsOpen())
-      AppStorage.set('brightness', pref.getBrightness())
-      AppStorage.set('formId', pref.getFormID())
+      AppStorage.set('isOpen', pref.getIsOpen());
+      AppStorage.set('brightness', pref.getBrightness());
+      AppStorage.set('formId', pref.getFormID());
     });
   }
 
@@ -119,12 +118,12 @@ export default class EntryAbility extends UIAbility {
   onForeground(): void {
     // Ability has brought to foreground
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onForeground');
-    const pref = new Pref(this.context)
-    AppStorage.set('formId', pref.getFormID())
+    const pref = new Pref(this.context);
+    AppStorage.set('formId', pref.getFormID());
   }
 
   onBackground(): void {
     // Ability has back to background
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onBackground');
   }
-}
+};

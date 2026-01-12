@@ -9,105 +9,105 @@ export default class Bulb {
   private _pref: Pref;
 
   constructor(context: Context) {
-    this._pref = new Pref(context)
+    this._pref = new Pref(context);
   }
 
   private _formId = AppStorage.link<string>('formId');
-  private _isOpen = AppStorage.link<boolean>('isOpen')
+  private _isOpen = AppStorage.link<boolean>('isOpen');
 
   get isOpen() {
-    return this._isOpen.get()
+    return this._isOpen.get();
   }
 
   set isOpen(val: boolean) {
-    this._isOpen.set(val)
-    this._pref.setIsOpen(val)
+    this._isOpen.set(val);
+    this._pref.setIsOpen(val);
     // update widget
-    console.log('set isOpen, form id', this._formId.get())
-    if (this._formId.get() != '') {
-      const data: formDataIsOpen = { 'isOpen': val }
-      let formInfo: formBindingData.FormBindingData = formBindingData.createFormBindingData(data);
-      formProvider.updateForm(this._formId.get(), formInfo)
+    console.info('set isOpen, form id', this._formId.get());
+    if (this._formId.get() !== '') {
+      const data: formDataIsOpen = { 'isOpen': val };
+      const formInfo: formBindingData.FormBindingData = formBindingData.createFormBindingData(data);
+      formProvider.updateForm(this._formId.get(), formInfo);
     }
   }
 
   private _brightness = AppStorage.link<number>('brightness');
 
   get brightness() {
-    return this._brightness.get()
+    return this._brightness.get();
   }
 
   set brightness(val: number) {
-    this._brightness.set(val)
-    this._pref.setBrightness(val)
+    this._brightness.set(val);
+    this._pref.setBrightness(val);
   }
 
 
-  private _r = AppStorage.link<number>('r');
+  private _red = AppStorage.link<number>('red');
 
-  get r() {
-    return this._r.get()
+  get red() {
+    return this._red.get();
   }
 
-  set r(val: number) {
-    this._r.set(val)
+  set red(val: number) {
+    this._red.set(val);
   }
 
-  private _g = AppStorage.link<number>('g');
+  private _green = AppStorage.link<number>('green');
 
-  get g() {
-    return this._g.get()
+  get green() {
+    return this._green.get();
   }
 
-  set g(val: number) {
-    this._g.set(val)
+  set green(val: number) {
+    this._green.set(val);
   }
 
-  private _b = AppStorage.link<number>('b');
+  private _blue = AppStorage.link<number>('blue');
 
-  get b() {
-    return this._b.get()
+  get blue() {
+    return this._blue.get();
   }
 
-  set b(val: number) {
-    this._b.set(val)
+  set blue(val: number) {
+    this._blue.set(val);
   }
 
   private _morningReminder = AppStorage.link<boolean>('morningReminder');
 
   get morningReminder() {
-    return this._morningReminder.get()
+    return this._morningReminder.get();
   }
 
   set morningReminder(val: boolean) {
     if (val) {
-      this.setReminder(true)
+      this.setReminder(true);
     } else {
-      this.removeReminder(true)
+      this.removeReminder(true);
     }
 
-    this._morningReminder.set(val)
+    this._morningReminder.set(val);
   }
 
   private _nightReminder = AppStorage.link<boolean>('nightReminder');
 
   get nightReminder() {
-    return this._nightReminder.get()
+    return this._nightReminder.get();
   }
 
   set nightReminder(val: boolean) {
     if (val) {
-      this.setReminder(false)
+      this.setReminder(false);
     } else {
-      this.removeReminder(false)
+      this.removeReminder(false);
     }
 
-    this._nightReminder.set(val)
+    this._nightReminder.set(val);
   }
 
 
   private async setReminder(morning: boolean) {
-    let targetReminderAgent: reminderAgentManager.ReminderRequestAlarm = {
+    const targetReminderAgent: reminderAgentManager.ReminderRequestAlarm = {
       reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_ALARM, // The reminder type is alarm.
       hour: morning ? 7 : 23, // Hour portion of the reminder time.
       minute: 0, // Minute portion of the reminder time.
@@ -116,7 +116,7 @@ export default class Bulb {
         {
           title: 'close',
           type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_CLOSE
-        },
+        }
       ],
       wantAgent: {
         // Information about the target UIAbility that is displayed after the reminder notification is touched.
@@ -130,26 +130,27 @@ export default class Bulb {
       content: morning ? 'Do not forget to close the night lamp.' : undefined, // Reminder content.
       // expiredContent: 'this reminder has expired', // Content to be displayed after the reminder expires.
       // snoozeContent: 'remind later', // Content to be displayed when the reminder is snoozed.
-      notificationId: 1, // Notification ID used by the reminder. If there are reminders with the same notification ID, the later one will overwrite the earlier one.
+      notificationId: 1, // Notification ID used by the reminder.
+      // If there are reminders with the same notification ID, the later one will overwrite the earlier one.
       slotType: notificationManager.SlotType.SOCIAL_COMMUNICATION // Type of the slot used by the reminder.
-    }
+    };
 
-    console.log(targetReminderAgent.hour.toString(), ' ', targetReminderAgent.minute.toString())
+    console.info(targetReminderAgent.hour.toString(), ' ', targetReminderAgent.minute.toString());
 
     await reminderAgentManager.publishReminder(targetReminderAgent).then((res: number) => {
-      let reminderId: number = res; // ID of the published reminder.
-      AppStorage.set(morning ? 'morningReminderId' : 'nightReminderId', reminderId)
+      const reminderId: number = res; // ID of the published reminder.
+      AppStorage.set(morning ? 'morningReminderId' : 'nightReminderId', reminderId);
       console.info('Succeeded in publishing reminder.', reminderId);
     }).catch((err: BusinessError) => {
       console.error(`Failed to publish reminder. Code: ${err.code}, message: ${err.message}`);
-    })
+    });
   }
 
   private async removeReminder(morning: boolean) {
-    let reminderId: number = AppStorage.get(morning ? 'morningReminderId' : 'nightReminderId') as number;
+    const reminderId: number = AppStorage.get(morning ? 'morningReminderId' : 'nightReminderId') as number;
     // The reminder ID is obtained from the callback after the reminder is published.
     await reminderAgentManager.cancelReminder(reminderId).then(() => {
-      console.log('Succeeded in canceling reminder.', reminderId);
+      console.info('Succeeded in canceling reminder.', reminderId);
     }).catch((err: BusinessError) => {
       console.error(`Failed to cancel reminder. Code: ${err.code}, message: ${err.message}`);
     });
@@ -157,5 +158,5 @@ export default class Bulb {
 }
 
 interface formDataIsOpen {
-  isOpen: boolean
+  isOpen: boolean;
 }

@@ -3,7 +3,7 @@ import { preferences } from '@kit.ArkData';
 
 export default class Pref {
   constructor(context: Context) {
-    let options: preferences.Options = { name: 'user_preferences' };
+    const options: preferences.Options = { name: 'user_preferences' };
     this.dataPreferences = preferences.getPreferencesSync(context, options);
   }
 
@@ -28,13 +28,13 @@ export default class Pref {
   }
 
   setFormID(val: string) {
-    console.log('setFormID', val);
+    console.info('setFormID', val);
     this.dataPreferences?.putSync('formId', val)
     this.dataPreferences?.flushSync()
   }
 
   getFormID() {
-    console.log('getFormID', this.dataPreferences?.getSync('formId', '-') as string);
+    console.info('getFormID', this.dataPreferences?.getSync('formId', '-') as string);
     return this.dataPreferences?.getSync('formId', '') as string
   }
 }

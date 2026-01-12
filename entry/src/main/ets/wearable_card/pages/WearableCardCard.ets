@@ -1,16 +1,16 @@
-const ls = new LocalStorage()
+const ls = new LocalStorage();
 
 @Entry(ls)
 @Component
 struct Wearable_cardCard {
-  @LocalStorageProp('isOpen') isOpen: boolean = false
+  @LocalStorageProp('isOpen') isOpen: boolean = false;
 
   build() {
     Row() {
       Button() {
         SymbolGlyph($r(this.isOpen ? 'sys.symbol.sun_max_fill_1' : 'sys.symbol.moon_fill'))
           .fontSize(24)
-          .fontColor([this.isOpen ? Color.Yellow : Color.White])
+          .fontColor([this.isOpen ? Color.Yellow : Color.White]);
       }
       .type(ButtonType.Circle)
       .aspectRatio(1)
@@ -34,12 +34,12 @@ struct Wearable_cardCard {
             isOpen: !this.isOpen
           }
         });
-      })
+      });
 
       Column({ space: 2 }) {
         Row({ space: 2 }) {
           Button() {
-            SymbolGlyph($r('sys.symbol.sun_max_fill_1')).fontColor([Color.White])
+            SymbolGlyph($r('sys.symbol.sun_max_fill_1')).fontColor([Color.White]);
           }
           .height('100%')
           .layoutWeight(1)
@@ -62,10 +62,10 @@ struct Wearable_cardCard {
               }
             });
 
-          })
+          });
 
           Button() {
-            SymbolGlyph($r('sys.symbol.lightbulb_max_fill')).fontColor([Color.White])
+            SymbolGlyph($r('sys.symbol.lightbulb_max_fill')).fontColor([Color.White]);
           }
           .height('100%')
           .layoutWeight(1)
@@ -88,12 +88,12 @@ struct Wearable_cardCard {
               }
             });
 
-          })
-        }.layoutWeight(1)
+          });
+        }.layoutWeight(1);
 
         Row({ space: 2 }) {
           Button() {
-            SymbolGlyph($r('sys.symbol.lightbulb_fill')).fontColor([Color.White])
+            SymbolGlyph($r('sys.symbol.lightbulb_fill')).fontColor([Color.White]);
           }
           .height('100%')
           .layoutWeight(1)
@@ -116,10 +116,10 @@ struct Wearable_cardCard {
               }
             });
 
-          })
+          });
 
           Button() {
-            SymbolGlyph($r('sys.symbol.lightbulb')).fontColor([Color.White])
+            SymbolGlyph($r('sys.symbol.lightbulb')).fontColor([Color.White]);
           }
           .height('100%')
           .layoutWeight(1)
@@ -142,13 +142,13 @@ struct Wearable_cardCard {
               }
             });
 
-          })
-        }.layoutWeight(1)
+          });
+        }.layoutWeight(1);
       }
       .height('100%')
       .layoutWeight(1)
       .justifyContent(FlexAlign.SpaceBetween)
-      .padding({ left: 8 })
+      .padding({ left: 8 });
     }
     .padding(16)
     .height('100%')
@@ -157,8 +157,8 @@ struct Wearable_cardCard {
     .onClick(() => {
       postCardAction(this, {
         action: 'router',
-        abilityName: 'EntryAbility',
+        abilityName: 'EntryAbility'
       });
-    })
+    });
   }
 }

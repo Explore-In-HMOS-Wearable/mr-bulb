@@ -16,15 +16,14 @@ export default class EntryFormAbility extends FormExtensionAbility {
       return formBindingData.createFormBindingData('');
     }
 
-    // Called to return a FormBindingData object.
-    let formId: string = want.parameters[formInfo.FormParam.IDENTITY_KEY] as string;
+    const formId: string = want.parameters[formInfo.FormParam.IDENTITY_KEY] as string;
 
-    interface formData { isOpen: boolean }
+    interface formData { isOpen: boolean; }
 
-    const pref: Pref = new Pref(this.context)
+    const pref: Pref = new Pref(this.context);
 
-    pref.setFormID(formId)
-    console.log('set form id', formId)
+    pref.setFormID(formId);
+    console.info('set form id', formId);
 
     const data: formData = { isOpen: pref.getIsOpen() };
 
@@ -53,24 +52,24 @@ export default class EntryFormAbility extends FormExtensionAbility {
     }
 
     // postCardAction 'message' is caught here
-    let data: formData = JSON.parse(message);
+    const data: formData = JSON.parse(message);
 
-    const pref: Pref = new Pref(this.context)
+    const pref: Pref = new Pref(this.context);
     if (data.method === 'openClose') {
-      pref.setIsOpen(data.isOpen)
-      vibrator.startVibration({ type: 'time', duration: 200 }, { usage: 'physicalFeedback' })
+      pref.setIsOpen(data.isOpen);
+      vibrator.startVibration({ type: 'time', duration: 200 }, { usage: 'physicalFeedback' });
     } else if (data.method === 'setBright') {
-      pref.setBrightness(data.brightness)
-      vibrator.startVibration({ type: 'time', duration: 200 }, { usage: 'physicalFeedback' })
+      pref.setBrightness(data.brightness);
+      vibrator.startVibration({ type: 'time', duration: 200 }, { usage: 'physicalFeedback' });
     }
 
 
-    let formInfo: formBindingData.FormBindingData = formBindingData.createFormBindingData(data);
+    const formInfo: formBindingData.FormBindingData = formBindingData.createFormBindingData(data);
     formProvider.updateForm(formId, formInfo).then(() => {
       hilog.info(DOMAIN_NUMBER, TAG, 'FormAbility updateForm success.');
     }).catch((error: BusinessError) => {
       hilog.info(DOMAIN_NUMBER, TAG, `Operation updateForm failed. Cause: ${JSON.stringify(error)}`);
-    })
+    });
   }
 
   onRemoveForm(formId: string) {
@@ -80,7 +79,6 @@ export default class EntryFormAbility extends FormExtensionAbility {
 
   onAcquireFormState(want: Want) {
     hilog.info(DOMAIN_NUMBER, TAG, `onAcquireFormState`);
-    // Called to return a {@link FormState} object.
     return formInfo.FormState.READY;
   }
-}
+};

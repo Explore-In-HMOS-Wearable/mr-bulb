@@ -4,7 +4,7 @@
       "name": "wearable_card",
       "displayName": "$string:wearable_card_display_name",
       "description": "$string:wearable_card_desc",
-      "src": "./ets/wearable_card/pages/Wearable_cardCard.ets",
+      "src": "./ets/wearable_card/pages/WearableCardCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
